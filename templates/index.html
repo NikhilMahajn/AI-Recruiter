@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiter.AI UI</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 50px 0;
+        }
+        .text-section h2 {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+        .text-section h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #4b0082;
+            margin-bottom: 20px;
+        }
+        .text-section p {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+        .btn-custom {
+            background-color: #6f42c1;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .btn-custom:hover {
+            background-color: #563d7c;
+            color: white;
+        }
+        .image-section {
+            position: relative;
+        }
+        .image-section img {
+            border-radius: 15px;
+            width: 100%;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .overlay-card {
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .overlay-card h5 {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .overlay-card .list-group-item {
+            border: none;
+            padding: 5px 0;
+        }
+        .feature-box {
+            position: absolute;
+            background-color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        .feature-box i {
+            color: #6f42c1;
+            margin-right: 10px;
+        }
+        .feature-1 {
+            bottom: 20%;
+            right: 10%;
+        }
+        .feature-2 {
+            bottom: 10%;
+            right: 10%;
+        }
+        .feature-3 {
+            bottom: 0;
+            right: 10%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid hero-section">
+        <div class="row align-items-center">
+            <!-- Left Text Section -->
+            <div class="col-lg-6 text-section  m-5">
+                <h2>Hire Smart, Grow Fast</h2>
+                <h1>RECRUITER.AI</h1>
+                <p>Build a winning team efficiently with our AI-driven recruiting solution designed to streamline your hiring process.</p>
+                <button class="btn btn-custom" onclick="next()">Get Started</button>
+            </div>
+            <!-- Right Image Section -->
+            <div class="col-lg-5 image-section">
+                <img src="\static\img\image.png" alt="Recruiter working on laptop">
+                <!-- Overlay Card 
+                <div class="overlay-card">
+                    <h5>NEW CANDIDATE</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex align-items-center">
+                            <span class="rounded-circle bg-primary-subtle me-2" style="width: 10px; height: 10px;"></span> 
+                            STATUS: <span class="ms-2">________</span>
+                        </li>
+                        <li class="list-group-item d-flex align-items-center">
+                            <span class="rounded-circle bg-light me-2" style="width: 10px; height: 10px;"></span> 
+                            EMAIL: <span class="ms-2">________</span>
+                        </li>
+                        <li class="list-group-item d-flex align-items-center">
+                            <span class="rounded-circle bg-light me-2" style="width: 10px; height: 10px;"></span> 
+                            DETAILS: <span class="ms-2">________</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="feature-box feature-1">
+                    <i>✨</i> Craft and post job postings
+                </div>
+                <div class="feature-box feature-2">
+                    <i>✨</i> Screen candidates in seconds
+                </div>
+                <div class="feature-box feature-3">
+                    <i>✨</i> AI job post refresh
+                </div>
+				Feature Boxes -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+	<script>
+		function next() {
+			window.location.href='/start';
+		}
+		</script>
+		
+</body>
+</html>

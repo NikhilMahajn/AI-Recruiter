@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart AI Recruiter Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            color: #4b0082;
+            font-weight: bold;
+        }
+        .dashboard-header p {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            background-color: #6f42c1;
+            color: white;
+            font-weight: bold;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            padding: 15px;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .applications-card .card-body h2 {
+            font-size: 2.5rem;
+            color: #4b0082;
+            margin: 0;
+        }
+        .applications-card .card-body i {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table thead {
+            background-color: #6f42c1;
+            color: white;
+        }
+        .table th, .table td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+        .table tbody tr:hover {
+            background-color: #f1f3f5;
+        }
+        .score-badge {
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        .score-high {
+            background-color: #28a745;
+            color: white;
+        }
+        .score-medium {
+            background-color: #ffc107;
+            color: black;
+        }
+        .score-low {
+            background-color: #dc3545;
+            color: white;
+        }
+        .process-indicator {
+            margin-top: 20px;
+        }
+        .process-indicator h5 {
+            font-size: 1.2rem;
+            color: #4b0082;
+            margin-bottom: 15px;
+        }
+        .progress {
+            height: 30px;
+            border-radius: 15px;
+            background-color: #e9ecef;
+        }
+        .progress-bar {
+            background-color: #6f42c1;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .process-step {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 10px;
+        }
+        .process-step span {
+            font-weight: bold;
+            color: #4b0082;
+        }
+        .btn-start {
+            background-color: #6f42c1;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: fit-content;
+            position: relative
+        }
+        .btn-start:hover {
+            background-color: #563d7c;
+            color: white;
+        }
+        .btn-start:disabled {
+            background-color: #ced4da;
+            cursor: not-allowed;
+        }
+        .btn-start:disabled .button-text {
+            opacity: 0.5; /* Dim the text when disabled */
+        }
+        .loading-spinner {
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        .btn-refresh {
+            background-color: #6f42c1;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .btn-refresh:hover {
+            background-color: #563d7c;
+            color: white;
+        }
+        .loading-spinner {
+            display: none;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .no-data {
+            text-align: center;
+            color: #6c757d;
+            padding: 20px;
+        }
+        .btn-home {
+            background-color: #6f42c1;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .btn-home:hover {
+            background-color: #563d7c;
+            color: white;
+            text-decoration: none;
+        }
+        .blur-content {
+            filter: blur(5px);
+            pointer-events: none; /* Prevent interaction while blurred */
+            transition: filter 0.3s ease;
+        }
+        
+        /* Ensure the modal is centered and on top */
+        #loadingModal {
+            display: none; /* Ensure Bootstrap controls visibility */
+        }
+        #loadingModal .modal-dialog {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ensure the modal is centered even on tall screens */
+        }
+        #loadingModal .modal-content {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            background-color: white;
+            width: 300px; /* Fixed width for consistency */
+            margin: 0 auto; /* Center horizontally */
+        }
+        #loadingModal .modal-body {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #loadingModal .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: #6f42c1; /* Match the purple theme */
+        }
+        #loadingModal p {
+            font-size: 1.1rem;
+            color: #4b0082;
+            margin: 0;
+            margin-top: 15px;
+        }
+        
+        .blur-content {
+            filter: blur(5px);
+            pointer-events: none;
+            transition: filter 0.3s ease;
+        }
+        
+        /* Ensure the modal backdrop is on top */
+        .modal-backdrop {
+            z-index: 1040 !important; /* Ensure backdrop is behind the modal but above other content */
+        }
+        #loadingModal {
+            z-index: 1050 !important; /* Ensure modal is above the backdrop */
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-3">Loading data, please wait...</p>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="container-fluid">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h1>Smart AI Recruiter Dashboard</h1>
+            <p>Monitor your hiring process and applicant details in real-time.</p>
+        </div>
+        <div class="position-fixed top-0 end-0 p-3">
+            <a href="/" class="btn btn-home">
+                <i class="bi bi-house-door me-2"></i>Home
+            </a>
+        </div>
+        <!-- Process Indicator -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card process-indicator">
+                    <div class="card-header">
+                        Current Process Status
+                    </div>
+                    <div class="card-body">
+                        <h5>Processing Applications</h5>
+                        <div class="progress">
+                            <div 
+                                id="progress_bar"
+                                class="progress-bar" 
+                                role="progressbar" 
+                                style="width: 0%;" 
+                                aria-valuenow="0" 
+                                aria-valuemin="0" 
+                                aria-valuemax="100"
+                            >
+                                0%
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            Current Step: <span id="currentStep">Not Started</span>
+                        </div>
+                        <button class="btn btn-start" id="startProcessBtn" onclick="startProgress()">
+                            <span class="button-text">Start Recruitment Process</span>
+                            <span class="spinner-border spinner-border-sm loading-spinner" role="status" style="display: none;">
+                            <span class="visually-hidden">Loading...</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Number of Applications Card -->
+
+            <div class="col-md-4">
+                <div class="card applications-card" data-bs-toggle="tooltip" data-bs-placement="top" title="Total number of applications reviewed">
+                    <div class="card-header">
+                        Total Applications Reviewed
+                    </div>
+                    <div class="card-body text-center">
+                        <i class="bi bi-check-circle text-success"></i>
+                        <h2 id="reviewedCount">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card applications-card" data-bs-toggle="tooltip" data-bs-placement="top" title="Total number of applications received">
+                    <div class="card-header">
+                        New Applications Received
+                    </div>
+                    <div class="card-body text-center">
+                        <i class="bi bi-file-earmark-text text-primary"></i>
+                        <h2 id="applicationsCount">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card applications-card" data-bs-toggle="tooltip" data-bs-placement="top" title="Total number of interviews scheduled">
+                    <div class="card-header">
+                        Interview Schedules
+                    </div>
+                    <div class="card-body text-center">
+                        <i class="bi bi-calendar-check text-warning"></i>
+                        <h2 id="interviewCount">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Applicant Table -->
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        Applicant Details
+                        <button class="btn btn-refresh" id="refreshBtn" onclick="loadCandidates()">Refresh</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="loading-spinner" id="loadingSpinner">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p>Loading applicants...</p>
+                        </div>
+                        <table class="table table-hover" id="applicantTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Score</th>
+                                    <th>Shortlisted</th>
+                                    <th>Interview</th>
+                                </tr>
+                            </thead>
+                            <tbody id="candidate-table">
+                            </tbody>
+                        </table>
+                        <div class="no-data" id="noDataMessage" style="display: none;">
+                            No applicants found.
+                        </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-start" id="scheduleInterviewBtn" onclick="sheduleInterview()">
+                            <span class="button-text">Shedule Interview</span>
+                            <span class="spinner-border spinner-border-sm loading-spinner" role="status" style="display: none;">
+                            <span class="visually-hidden">Loading...</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <script>
+        // Initialize tooltips
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+        async function fetchData() {
+            const loadingModal = new bootstrap.Modal(document.getElementById("loadingModal"), {
+                backdrop: "static",
+                keyboard: false
+            });
+            const dashboardContent = document.querySelector(".container-fluid");
+        
+            try {
+                loadingModal.show();
+                dashboardContent.classList.add("blur-content");
+        
+                let response = await fetch('/download_resume');
+                let data = await response.json();
+                document.getElementById("applicationsCount").innerText = data.resume || 0;
+                // Assuming the API returns reviewed and interview counts as well
+                document.getElementById("reviewedCount").innerText = data.review || 0;
+                document.getElementById("interviewCount").innerText = data.interview || 0;
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                loadingModal.hide();
+                dashboardContent.classList.remove("blur-content");
+            }
+        }
+        function startProgress() {
+            let eventSource = new EventSource("/progress");
+            const currentStep = document.getElementById("currentStep");
+            const startProcessBtn = document.getElementById("startProcessBtn");
+            const spinner = startProcessBtn.querySelector(".loading-spinner");
+            const buttonText = startProcessBtn.querySelector(".button-text");
+            currentStep.innerText = "Stating..."
+            startProcessBtn.disabled = true;
+            spinner.style.display = "inline-block";
+
+            const steps = [
+                { name: "Downloading Resumes", range: [0, 25] },
+                { name: "Analyzing Resumes", range: [26, 50] },
+                { name: "Scoring", range: [51, 75] },
+                { name: "Finished", range: [76, 100] }
+            ];
+
+            eventSource.onmessage = function(event) {
+                let progress = parseInt(event.data);
+                let progressBar = document.getElementById("progress_bar");
+
+                progressBar.style.width = progress + "%";
+                progressBar.setAttribute("aria-valuenow", progress);
+                progressBar.innerText = progress + "%";
+
+                // Update the current step based on progress
+                for (const step of steps) {
+                    if (progress >= step.range[0] && progress <= step.range[1]) {
+                        currentStep.innerText = step.name;
+                        break;
+                    }
+                }
+
+                if (progress >= 100) {
+                    eventSource.close(); // Stop receiving updates
+                    startProcessBtn.disabled = false; // Re-enable the button
+                    buttonText.style.display = "inline"; // Show the button text
+                    spinner.style.display = "none"; // Hide the spinner
+                }
+            };
+        }
+
+        function loadCandidates() {
+            const loadingSpinner = document.getElementById("loadingSpinner");
+            const candidateTable = document.getElementById("candidate-table");
+            const noDataMessage = document.getElementById("noDataMessage");
+
+            // Show loading spinner
+            loadingSpinner.style.display = "block";
+            candidateTable.innerHTML = "";
+            noDataMessage.style.display = "none";
+
+            $.getJSON('/getApplicant', function(data) {
+                let rows = '';
+                if (data && data.length > 0) {
+                    data.forEach(candidate => {
+                        let badgeClass = candidate.score >= 70 ? 'score-high' : 'score-low';
+                        let status = candidate.score>=70 ? 'selected':'not selected';
+                        let interview = candidate.interview?candidate.interview:"Not Sheduled";
+
+                        rows += `<tr>
+                                    <td>${candidate.name}</td>
+                                    <td>${candidate.email}</td>
+                                    <td><span class="score-badge ${badgeClass}">${candidate.score}</span></td>
+                                    <td><span class="score-badge ${badgeClass}">${status}</span></td>
+                                    <td>${interview}</td>
+                                 </tr>`;
+                    });
+                    candidateTable.innerHTML = rows;
+                } else {
+                    noDataMessage.style.display = "block";
+                }
+                // Hide loading spinner
+                loadingSpinner.style.display = "none";
+            }).fail(function() {
+                noDataMessage.style.display = "block";
+                loadingSpinner.style.display = "none";
+            });
+        }
+
+        $(document).ready(function() {
+            loadCandidates();
+            fetchData()  
+        });
+
+        function sheduleInterview(){
+        
+
+            try {
+                btn.disabled = true;
+                buttonText.style.display = "none";
+                spinner.style.display = "inline-block";
+                let response = await fetch("/schedule");
+                loadCandidates()
+
+            }
+             catch (error) {
+                console.error("Error scheduling interview:", error);
+            } finally {
+                btn.disabled = false; 
+                buttonText.style.display = "inline"; 
+                spinner.style.display = "none"; 
+
+            }
+        }
+            
+        
+
+    </script>
+</body>
+</html>
