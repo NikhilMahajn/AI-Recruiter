@@ -24,7 +24,8 @@ import imaplib
 import email
 from email.header import decode_header
 from dotenv import load_dotenv
-from flask import render_template,Flask,request,jsonify,Response
+from flask import render_template,Flask,request,jsonify,Response,redirect, url_for
+
 from datetime import datetime, timedelta
 import smtplib
 from email.mime.text import MIMEText
@@ -327,6 +328,8 @@ def create_graph(path):
 
 @app.route('/download_resume')
 def download_resume():
+    if not email_address:
+        return redirect(url_for('start'))
     initialize_database()
     conn = sqlite3.connect("checkpoints.sqlite",check_same_thread=False)
     cursor = conn.cursor()
@@ -416,7 +419,6 @@ def download_resume():
     
 @app.route('/')
 def index():
-    
     return render_template('index.html')
 @app.route('/start',methods = ['POST', 'GET'])
 def start():
