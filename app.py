@@ -328,6 +328,7 @@ def create_graph(path):
 
 @app.route('/download_resume')
 def download_resume():
+    print(email_address)
     if not email_address:
         return redirect(url_for('start'))
     initialize_database()
@@ -430,7 +431,9 @@ def dashboard():
     global job_desc
     if request.method == 'POST':
       job_desc = request.form.get("jobSummary") 
-      email_address = request.form.get("email") 
+      email_address = request.form.get("email")
+      
+      print(request.form)
     return render_template("dashboard.html")
 
 @app.route('/progress')
@@ -570,5 +573,5 @@ def addMail(id):
     conn.close()
 
 if __name__=="__main__":
-    app.run()
+    app.run(debug=True)
    
